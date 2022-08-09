@@ -1,0 +1,17 @@
+/*.csproj
+/.vs/LocalizationManager/v16/.suo
+/.vs/Localization_working_project/v16/.suo
+/.vsconfig
+/UserSettings
+/Library
+/Logs
+/obj
+/Packages
+/LocalizationManager.sln
+/Localization_working_project.sln
+/DLL_Project/.vs
+/DLL_Project/Infusion.Localization/bin
+/DLL_Project/Infusion.Localization/obj
+/Temp
+/*.sln
+.vs
