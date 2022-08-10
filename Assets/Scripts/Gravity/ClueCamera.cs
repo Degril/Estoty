@@ -8,14 +8,19 @@ namespace Gravity
 
         private float _angleRotation;
         
-        public Transform LookAt { get; set; }
+        public Transform LookAtObject { get; set; }
 
         private void Update()
         {
-            if (!LookAt) return;
+            if (!LookAtObject) return;
             
+            MoveAndLookToCharacter();
+        }
+
+        private void MoveAndLookToCharacter()
+        {
             var parent = transform.parent;
-            parent.position = LookAt.transform.position;
+            parent.position = LookAtObject.transform.position;
 
             _angleRotation = Input.GetAxis("Mouse X") * sensitivity;
                 
@@ -23,6 +28,7 @@ namespace Gravity
             var objectUp = parent.transform.up;
 
             parent.rotation = Quaternion.FromToRotation(objectUp, targetDirection) * parent.rotation * Quaternion.Euler(0,_angleRotation, 0);
+            
         }
     }
 }

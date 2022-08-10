@@ -47,7 +47,7 @@ namespace Game
             firstCell.Show();
         
             _mainCharacter = Instantiate(_mainCharacterPrefab, firstCell.transform.position+ firstCell.transform.up * 3, Quaternion.identity, null);
-            _camera.LookAt = _mainCharacter.transform;
+            _camera.LookAtObject = _mainCharacter.transform;
         }
     }
 }

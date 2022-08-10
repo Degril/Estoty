@@ -127,9 +127,6 @@ namespace Game
             }
             
             transform.rotation = Quaternion.LookRotation(targetDirectionZ, targetDirectionY);
-            //transform.up = targetDirection;
-            //transform.rotation *= Quaternion.FromToRotation(objectUp, targetDirection);
-            //transform.LookAt(objectForward);
         }
 
         private void Move()
@@ -163,8 +160,6 @@ namespace Game
             }
         }
 
-
-        [ContextMenu("123")]
         public void DoJump()
         {
             _isJump = true;
