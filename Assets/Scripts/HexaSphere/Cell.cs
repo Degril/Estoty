@@ -54,12 +54,12 @@ namespace Sphere
                 sphereButton.transform.position = connectionPosition - startPosition + transform.position + transform.parent.position;
                 sphereButton.Init(neighbour, connectionPosition);
                 _clickableSpheres.Add(sphereButton);
-                sphereButton.OnCLickable += OnClickedSphere;
+                sphereButton.OnClicked += OnClickedSphere;
             }
 
         }
 
-        public void AnimateOppening(Transform character)
+        public void AnimateOpening(Transform character)
         {
             
         }

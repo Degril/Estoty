@@ -5,6 +5,8 @@ namespace Gravity
     public static class PolarTransform
     {
         private static Transform _planetTransform;
+        
+        private const float NearPosition = 3;
         public static void SetPlanet(Transform transform)
         {
             _planetTransform = transform;
@@ -24,6 +26,7 @@ namespace Gravity
         {
             return _planetTransform.position;
         }
+        
         public static Vector2 ToPolar(this Vector3 position)
         {
             Vector2 polarPosition;
@@ -37,8 +40,12 @@ namespace Gravity
  
             return polarPosition;
         }
- 
- 
+
+        public static bool PolarDistanceIsNear(this Vector3 from, Vector3 to)
+        {
+            return (from.ToPolar() - to.ToPolar()).sqrMagnitude < NearPosition;
+        }
+
         public static Vector3 PolarToCartesian(Vector2 polarPosition)
         {
             var origin = new Vector3(0,0,1);

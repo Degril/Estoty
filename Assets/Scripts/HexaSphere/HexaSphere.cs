@@ -10,7 +10,7 @@ using static UnityEngine.Object;
 namespace Sphere
 {
     [RequireComponent(typeof(MeshFilter))]
-    public class Hexasphere : MonoBehaviour
+    public class HexaSphere : MonoBehaviour
     {
         [SerializeField] private float _size = 60f;
         
@@ -34,19 +34,17 @@ namespace Sphere
         {
             var stopwatch = new System.Diagnostics.Stopwatch();
 
-            stopwatch.Start();
             var inside = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            //inside.GetComponent<MeshFilter>().mesh = CreateHexasphere((size*subdivisions/2) + offset - subtract, -0.1f, subdivisions);
             inside.transform.parent = transform;
             inside.transform.position = transform.position;
             inside.transform.localScale = Vector3.one * (_size-2) * 0.5f;
+            
             GravityAttractor = inside.AddComponent<GravityAttractor>();
             var insideRenderer = inside.GetComponent<MeshRenderer>();
             insideRenderer.material = insideMaterial;
             insideRenderer.receiveShadows = false; // configure to your liking.
-            stopwatch.Stop();
+            
             Debug.Log("Generating inside(second) mesh. operation took: " + stopwatch.ElapsedMilliseconds + "ms");
-            stopwatch.Reset();
             
             stopwatch.Start();
             Cells = CreateHexasphere((_size * 1 / 2), offset, subdivisions, _cellPrefab, transform, insideMaterial).ToArray();
@@ -76,14 +74,12 @@ namespace Sphere
     public class HexagonSphere
     {
         private float size;
-        private int subdivisions;
         private List<FinalFace> finalFaces;
         private Face[] faces;
         private Vector3[] centroidPoints;
         public HexagonSphere(float size, int subdivisions, float offset)
         {
             this.size = size;
-            this.subdivisions = subdivisions;
             finalFaces = new List<FinalFace>();
 
             var storage = new Storage();
@@ -95,7 +91,7 @@ namespace Sphere
             foreach (var face in faces)
             {
                 face.FixRadius(size);
-                face.setOffset(offset);
+                face.SetOffset(offset);
             }
         
             foreach (var face in faces)
@@ -104,9 +100,7 @@ namespace Sphere
             }
             finalFaces = storage.FindShapeFaces();
         }
-
-
-    
+        
         public IEnumerable<Cell> GetCells(Cell cellPrefab, Transform parent, Material material)
         {
             var faceIds = new Dictionary<FinalFace, int>();
@@ -138,7 +132,7 @@ namespace Sphere
 
 
                 var cell = cells[i];
-
+                
                 cell.transform.SetParent(parent, false);
                 cell.transform.rotation = Quaternion.FromToRotation(cell.transform.up, finalFace.GetNormal()) * cell.transform.rotation;
                 cell.transform.localPosition = finalFace.CenterPoint;
@@ -284,17 +278,14 @@ namespace Sphere
             Neighbours = new Dictionary<Vector3, FinalFace>();
         }
         public Vector3 GetNormal() => normal;
-        public Face[] GetFaces() => faces.ToArray();
-        public (Vector3, FinalFace)[] GetNeighbours() => Neighbours.Select(keyVal=> (keyVal.Key, keyVal.Value)).ToArray();
+        public IEnumerable<(Vector3, FinalFace)> GetNeighbours() => Neighbours.Select(keyVal=> (keyVal.Key, keyVal.Value));
 
         public (Vector3[] verts, int[] tris) GetMesh()
         {
-            var verts = new List<Vector3>();
             var tris = new List<int>();
 
-            bool frontFace = false;
-            // find squared triangle area 
-
+            var frontFace = false;
+            
             var P = faces[2].OffsetCentroid(this);
             var Q = faces[1].OffsetCentroid(this);
             var R = faces[4].OffsetCentroid(this);
@@ -306,11 +297,8 @@ namespace Sphere
 
         
             frontFace =  Vector3.Dot(cross, normal) > 0.005f;
-            
-            for (var i = 0; i < faces.Count; i++)
-            {
-                verts.Add(faces[i].OffsetCentroid(this));
-            }
+
+            var verts = faces.Select(t => t.OffsetCentroid(this)).ToArray();
 
 
             switch (faces.Count)
@@ -379,7 +367,6 @@ namespace Sphere
             }
 
             return (verts.ToArray(), tris.ToArray());
-
         }
 
         private void RearangeFaces()
@@ -388,27 +375,28 @@ namespace Sphere
             var lastFace = faces[0];
             var firstFace = lastFace;
             faces.Remove(lastFace);
-            while(faces.Count > 0) // probably replace with a for loop that uses the initial size of faces
+            while(faces.Count > 0)
             {
                 foreach(var face in faces)
                 {
-                    Vector3[] lastFacePoints = {lastFace.p1, lastFace.p2, lastFace.p3};
+                    Vector3[] lastFacePoints = {lastFace.P1, lastFace.P2, lastFace.P3};
                     var sharedPoints = 0;
-                    if (lastFacePoints.Contains(face.p1))
+                    if (lastFacePoints.Contains(face.P1))
                         ++sharedPoints;
-                    if (lastFacePoints.Contains(face.p2))
+                    if (lastFacePoints.Contains(face.P2))
                         ++sharedPoints;
-                    if (lastFacePoints.Contains(face.p3))
+                    if (lastFacePoints.Contains(face.P3))
                         ++sharedPoints;
                     if (sharedPoints != 2) continue;
                     rearanged.Add(face);
-                    faces.Remove(face); // might cause c# to flip out.
+                    faces.Remove(face);
                     lastFace = face;
                     break;
                 }
             }
             faces = rearanged;
         }
+        
         public Vector3 OffsetToRadius(Vector3 p, float sphereRadius)
         {
             var currentDistance = (p.x * p.x) + (p.y * p.y) + (p.z * p.z);
@@ -418,45 +406,45 @@ namespace Sphere
     }
     public class Face
     {
-        float offset = 5;
-        public Vector3 p1;
-        public Vector3 p2;
-        public Vector3 p3;
-        public Face[] neighbours = new Face[3];
-        public void setOffset(float offset)
+        private float _offset = 5;
+        public Vector3 P1;
+        public Vector3 P2;
+        public Vector3 P3;
+        
+        public void SetOffset(float offset)
         {
-            this.offset = offset;
+            _offset = offset;
         }
         public Face(Vector3 point1, Vector3 point2, Vector3 point3)
         {
-            this.p1 = point1;
-            this.p2 = point2;
-            this.p3 = point3;
+            P1 = point1;
+            P2 = point2;
+            P3 = point3;
         }
 
         public Face[] Subdivide()
         {
-            var m1 = new Vector3((p1.x + p2.x) / 2, (p1.y + p2.y) / 2, (p1.z + p2.z) / 2);
-            var m2 = new Vector3((p2.x + p3.x) / 2, (p2.y + p3.y) / 2, (p2.z + p3.z) / 2);
-            var m3 = new Vector3((p3.x + p1.x) / 2, (p3.y + p1.y) / 2, (p3.z + p1.z) / 2);
+            var m1 = new Vector3((P1.x + P2.x) / 2, (P1.y + P2.y) / 2, (P1.z + P2.z) / 2);
+            var m2 = new Vector3((P2.x + P3.x) / 2, (P2.y + P3.y) / 2, (P2.z + P3.z) / 2);
+            var m3 = new Vector3((P3.x + P1.x) / 2, (P3.y + P1.y) / 2, (P3.z + P1.z) / 2);
 
             var array = new Face[4];
-            array[0] = new Face(m1, p1, m3);
-            array[1] = new Face(m3, p3, m2);
+            array[0] = new Face(m1, P1, m3);
+            array[1] = new Face(m3, P3, m2);
             array[2] = new Face(m2, m1, m3);
-            array[3] = new Face(p2, m1, m2);
+            array[3] = new Face(P2, m1, m2);
 
             return array;
         }
 
         public Vector3 GetCentroidPoint()
         {
-            return MultiplyVector(new Vector3((p1.x + p2.x + p3.x) / 3, (p1.y + p2.y + p3.y) / 3, (p1.z + p2.z + p3.z) / 3), 1.07f);
+            return MultiplyVector(new Vector3((P1.x + P2.x + P3.x) / 3, (P1.y + P2.y + P3.y) / 3, (P1.z + P2.z + P3.z) / 3), 1.07f);
         }
 
         public Vector3 OffsetCentroid(FinalFace f)
         {
-            return GetCentroidPoint() + f.GetNormal() * offset;
+            return GetCentroidPoint() + f.GetNormal() * _offset;
         }
 
         private static float CorrectToRadius(float sphereRadius, Vector3 p)
@@ -467,9 +455,9 @@ namespace Sphere
         }
         public void FixRadius(float radius)
         {
-            p1 = MultiplyVector(p1, CorrectToRadius(radius, p1));
-            p2 = MultiplyVector(p2, CorrectToRadius(radius, p2));
-            p3 = MultiplyVector(p3, CorrectToRadius(radius, p3));
+            P1 = MultiplyVector(P1, CorrectToRadius(radius, P1));
+            P2 = MultiplyVector(P2, CorrectToRadius(radius, P2));
+            P3 = MultiplyVector(P3, CorrectToRadius(radius, P3));
         }
 
         private static Vector3 MultiplyVector(Vector3 point, float multiplication)
@@ -478,9 +466,9 @@ namespace Sphere
         }
         public void StorePoints(Storage storage)
         {
-            storage.AddPoint(p1, this);
-            storage.AddPoint(p2, this);
-            storage.AddPoint(p3, this);
+            storage.AddPoint(P1, this);
+            storage.AddPoint(P2, this);
+            storage.AddPoint(P3, this);
         }
     }
     public static class FinalFaceStorage
@@ -501,8 +489,8 @@ namespace Sphere
                 dictionary[key]++;
             else dictionary.Add(key, 1);
         }
-            
-        public static void SortAndAdd((Vector3, Vector3) pair, IDictionary<(Vector3, Vector3), int> dictionary)
+
+        private static void SortAndAdd((Vector3, Vector3) pair, IDictionary<(Vector3, Vector3), int> dictionary)
         {
             SortPair(ref pair);
             AddToDictionary(pair, dictionary);
@@ -534,7 +522,6 @@ namespace Sphere
             }
 
             var filteredNeighbourEdges = neighbourEdges.Where(pair => pair.Value.Count == 2);
-            var filteredNeighbourEdges2 = neighbourEdges.Where(pair => pair.Value.Count == 1);
             foreach (var (positions, faces) in filteredNeighbourEdges)
             {
                 var neighbour1 = faces[0];

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Data
 {
-    //will it for simple project
+    //use it for simple project
     [Serializable]
     public class Resource
     {
@@ -17,7 +17,7 @@ namespace Data
         public GameObject prefab;
     }
     
-    //will it with odin inspector or serialization from remote json
+    //use it with odin inspector or serialization from remote json
     
     
     // public abstract class Resource

@@ -15,7 +15,7 @@ namespace Sphere
         private MeshRenderer _renderer;
         private Color _startColor;
 
-        public event Action<Cell, Vector3> OnCLickable;
+        public event Action<Cell, Vector3> OnClicked;
         
         public void Init(Cell neighbourCell, Vector3 connectedPosition)
         {
@@ -28,7 +28,7 @@ namespace Sphere
         public void OnPointerClick(PointerEventData eventData)
         {
             _neighbourCell.Show();
-            OnCLickable?.Invoke(_neighbourCell, _connectedPosition);
+            OnClicked?.Invoke(_neighbourCell, _connectedPosition);
         }
 
         public void OnPointerEnter(PointerEventData eventData)
