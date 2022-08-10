@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Gravity;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -23,7 +22,7 @@ namespace Sphere
         private Vector3 startPosition;
 
         public event Action<Cell, Vector3> OnShow;
-        public event Action<Cell, Vector3> OnClickedSphere;
+        public event Action<Cell, Vector3> OnSpherClicked;
 
         private const int RequiredResource1 = 200;
         private const int RequiredResource2 = 200;
@@ -54,16 +53,11 @@ namespace Sphere
                 sphereButton.transform.position = connectionPosition - startPosition + transform.position + transform.parent.position;
                 sphereButton.Init(neighbour, connectionPosition);
                 _clickableSpheres.Add(sphereButton);
-                sphereButton.OnClicked += OnClickedSphere;
+                sphereButton.OnClicked += OnSpherClicked;
             }
 
         }
-
-        public void AnimateOpening(Transform character)
-        {
-            
-        }
-
+        
         public void Init(Dictionary<Vector3, Cell> neighbours, Vector3 centerPoint)
         {
             _centerPoint = centerPoint;

@@ -1,12 +1,9 @@
-﻿using System;
-using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Gravity
 {
     public class ClueCamera : MonoBehaviour
     {
-        
         [SerializeField] private float sensitivity = 3;
 
         private float _angleRotation;

@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Gravity;
@@ -23,13 +22,12 @@ namespace Sphere
 
         public Material insideMaterial;
 
-        public Cell _cellPrefab; 
-        
-        
+        public Cell _cellPrefab;
+
         public Cell[] Cells { get; private set; }
         public UnityEvent<Cell, Vector3> OnCellShown; 
-        public UnityEvent<Cell, Vector3> OnClickableSphere; 
-        public GravityAttractor GravityAttractor { get; private set; }
+        public UnityEvent<Cell, Vector3> OnSphereClicked; 
+        
         public void GenerateCells()
         {
             var stopwatch = new System.Diagnostics.Stopwatch();
@@ -39,10 +37,10 @@ namespace Sphere
             inside.transform.position = transform.position;
             inside.transform.localScale = Vector3.one * (_size-2) * 0.5f;
             
-            GravityAttractor = inside.AddComponent<GravityAttractor>();
+            inside.AddComponent<GravityAttractor>();
             var insideRenderer = inside.GetComponent<MeshRenderer>();
             insideRenderer.material = insideMaterial;
-            insideRenderer.receiveShadows = false; // configure to your liking.
+            insideRenderer.receiveShadows = false;
             
             Debug.Log("Generating inside(second) mesh. operation took: " + stopwatch.ElapsedMilliseconds + "ms");
             
@@ -51,7 +49,7 @@ namespace Sphere
             foreach (var cell in Cells)
             {
                 cell.OnShow += OnCellShown.Invoke;
-                cell.OnClickedSphere += OnClickableSphere.Invoke;
+                cell.OnSpherClicked += OnSphereClicked.Invoke;
             }
             stopwatch.Stop();   
             Debug.Log("Generating first mesh. operation took: " + stopwatch.ElapsedMilliseconds + "ms");
