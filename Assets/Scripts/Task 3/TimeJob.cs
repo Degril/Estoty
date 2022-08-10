@@ -1,9 +1,11 @@
-﻿using Unity.Collections;
+﻿using Unity.Burst;
+using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
 
 namespace Task_3
 {
+    [BurstCompile]
     public struct TimeJob : IJobParallelFor
     {
         [ReadOnly] public Vector3 startPosition;

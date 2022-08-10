@@ -1,11 +1,11 @@
-﻿
-
+﻿using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
 
 namespace Task_3
 {
+    [BurstCompile]
     public struct ColorJob : IJobParallelFor
     {
         [ReadOnly] public Color fromColor;

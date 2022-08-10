@@ -63,6 +63,7 @@ public class ColorChangerBehaviour : MonoBehaviour
         };
         var timeHandle = timeJob.Schedule(NumberOfEntites, 0);
         timeHandle.Complete();
+        
     }
 
     private void Update()
@@ -84,5 +85,13 @@ public class ColorChangerBehaviour : MonoBehaviour
         handle.Complete();
         for (var i = 0; i < NumberOfEntites; i++)
             _entities[i].color = _colors[i];
+    }
+
+    private void OnDestroy()
+    {
+        _positions.Dispose();
+        _startTimeToChangeColor.Dispose();
+        _endTimeToChangeColor.Dispose();
+        _colors.Dispose();
     }
 }
