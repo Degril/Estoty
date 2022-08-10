@@ -117,10 +117,19 @@ namespace Game
 
         private void Rotate()
         {
-            var targetDirection = (transform.position - PolarTransform.GetPolarPositionZero()).normalized;
-            var objectUp = transform.up;
+            var targetDirectionY = (transform.position - PolarTransform.GetPolarPositionZero()).normalized;
+            var targetDirectionZ = transform.forward;
+            var polarY = transform.position.GetPolarPositionY();
 
-            transform.rotation *= Quaternion.FromToRotation(objectUp, targetDirection);
+            if (_isMove)
+            {
+                targetDirectionZ = (_targetPosition.SetPolarY(polarY) - transform.position).normalized;
+            }
+            
+            transform.rotation = Quaternion.LookRotation(targetDirectionZ, targetDirectionY);
+            //transform.up = targetDirection;
+            //transform.rotation *= Quaternion.FromToRotation(objectUp, targetDirection);
+            //transform.LookAt(objectForward);
         }
 
         private void Move()

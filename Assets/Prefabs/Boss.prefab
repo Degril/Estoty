@@ -3426,7 +3426,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7404414613777697007}
   - component: {fileID: 2062636422792351328}
-  - component: {fileID: 9018323307655739063}
   - component: {fileID: -5415405441588474804}
   - component: {fileID: 5435082162086368993}
   m_Layer: 0
@@ -3473,18 +3472,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &9018323307655739063
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7893142672928281173}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cab1c94012844f1abf7bacf443cac2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-5415405441588474804
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3497,22 +3484,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c6ce8f8e8204f0596c1643d7782d46b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Gravity: -15
-  MoveSpeed: 2
-  JumpHeight: 3.5
-  JumpTimeout: 0.5
-  FallTimeout: 0.15
-  SpeedChangeRate: 3
-  Grounded: 1
-  GroundedOffset: -0.14
-  GroundedRadius: 0.3
-  InsideObject: 0
-  AreaHeight: 0.01
-  AreaRadius: 0.01
-  GroundLayers:
+  gravity: -15
+  moveSpeed: 2
+  jumpHeight: 2.5
+  jumpTimeout: 0.5
+  fallTimeout: 0.15
+  speedChangeRate: 10
+  grounded: 1
+  groundedOffset: -0.14
+  groundedRadius: 0.28
+  insideObject: 0
+  areaHeight: 1
+  areaRadius: 0.28
+  groundLayers:
     serializedVersion: 2
     m_Bits: 8
-  VerticalVelocity: 0
+  verticalVelocity: 0
 --- !u!143 &5435082162086368993
 CharacterController:
   m_ObjectHideFlags: 0

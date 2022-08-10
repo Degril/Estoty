@@ -345,11 +345,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sensitivity: 3
-  limit: 80
-  zoom: 0.25
-  zoomMax: 10
-  zoomMin: 3
-  offset: {x: 0, y: 0, z: 0}
 --- !u!81 &1134929316
 AudioListener:
   m_ObjectHideFlags: 0
@@ -458,7 +453,7 @@ MonoBehaviour:
   OnCellShown:
     m_PersistentCalls:
       m_Calls: []
-  OnClickableSphere:
+  OnSphereClicked:
     m_PersistentCalls:
       m_Calls: []
 --- !u!4 &1249935989
@@ -538,7 +533,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d833de74e871f2948b68524ffd7660e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mainCharacterPrefab: {fileID: 9018323307655739063, guid: 34b59d685d4e7634bb08d8b6fa97f612,
+  _mainCharacterPrefab: {fileID: -5415405441588474804, guid: 34b59d685d4e7634bb08d8b6fa97f612,
     type: 3}
   _camera: {fileID: 1134929315}
 --- !u!1 &1549359135
