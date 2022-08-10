@@ -3,10 +3,11 @@ using UnityEngine;
 
 namespace Data
 {
-    public class ResourcesStorage : MonoBehaviour
+    public class ResourcesStorage
     {
         private Dictionary<Resource.Type, Resource> dictionary = new();
-        private void Awake()
+
+        public ResourcesStorage()
         {
             var resources = Resources.Load<ResourcesScriptable>(nameof(ResourcesScriptable));
             foreach (var resource in resources.resources)

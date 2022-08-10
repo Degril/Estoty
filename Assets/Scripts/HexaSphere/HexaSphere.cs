@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Data.Storages;
 using Gravity;
 using UnityEngine;
 using UnityEngine.Events;
@@ -9,7 +10,7 @@ using static UnityEngine.Object;
 namespace Sphere
 {
     [RequireComponent(typeof(MeshFilter))]
-    public class HexaSphere : MonoBehaviour
+    public class HexaSphere : MonoBehaviour, IService
     {
         [SerializeField] private float _size = 60f;
         
